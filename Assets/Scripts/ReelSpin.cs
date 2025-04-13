@@ -14,6 +14,8 @@ public class ReelSpin : MonoBehaviour
 
     private bool isInteracting = false;
     private Vector3 lastPosition;
+    private enum SpinDirectionState { Clockwise, CounterClockwise, Idle};
+    private SpinDirectionState spinDirection;
 
     void Start()
     {
@@ -33,6 +35,8 @@ public class ReelSpin : MonoBehaviour
         {
             triggerAction.action.performed += OnTriggerPerformed;
             triggerAction.action.canceled += OnTriggerCanceled;
+            spinDirection = SpinDirectionState.Idle;
+            lastPosition = transform.position;
         }
     }
 
@@ -80,6 +84,7 @@ public class ReelSpin : MonoBehaviour
         if (isInteracting)
         {
             EndInteraction();
+            spinDirection = SpinDirectionState.Idle;
         }
     }
 
@@ -100,6 +105,10 @@ public class ReelSpin : MonoBehaviour
         // reelKnob.GetComponent<Renderer>().material.color = Color.white;
     }
 
+    public int GetSpinDirection() { 
+        return (int)spinDirection;
+    }
+
     void RotateReelBasedOnControllerMovement()
     {
         // Current controller position
@@ -111,12 +120,26 @@ public class ReelSpin : MonoBehaviour
 
         // Get vector from reel knob to controller
         Vector3 reelToController = currentPosition - spinRef.position;
+        Vector3 reelToLast = lastPosition - spinRef.position;
 
         // Project controller position onto the plane perpendicular to rotation axis
         Vector3 projectedControllerVector = Vector3.ProjectOnPlane(reelToController, reelForward);
+        Vector3 lastProjected = Vector3.ProjectOnPlane(reelToLast, reelForward).normalized;
 
         // Calculate angle between the projected vector and reelUp vector
         float angle = Vector3.SignedAngle(reelUp, projectedControllerVector, reelForward);
+        float direction = Vector3.Dot(Vector3.Cross(lastProjected, projectedControllerVector), reelForward);
+
+        if(Mathf.Abs(direction) < float.Epsilon)
+        {
+            spinDirection = SpinDirectionState.Idle;
+        }
+        else if(direction < 0) {
+            spinDirection = SpinDirectionState.Clockwise;
+        }
+        else {
+            spinDirection = SpinDirectionState.CounterClockwise;
+        }
 
         // Get current rotation of knob around forward axis
         Quaternion currentRotation = transform.rotation;
