@@ -16,6 +16,8 @@ public class ReelSpin : MonoBehaviour
     private Vector3 lastPosition;
     private enum SpinDirectionState { Clockwise, CounterClockwise, Idle};
     private SpinDirectionState spinDirection;
+    private float spinSpeed = 1.0f;
+    private float lastAngle = 0.0f;
 
     void Start()
     {
@@ -109,6 +111,8 @@ public class ReelSpin : MonoBehaviour
         return (int)spinDirection;
     }
 
+    public float GetSpinSpeed()
+    { return spinSpeed; }
     void RotateReelBasedOnControllerMovement()
     {
         // Current controller position
@@ -130,7 +134,9 @@ public class ReelSpin : MonoBehaviour
         float angle = Vector3.SignedAngle(reelUp, projectedControllerVector, reelForward);
         float direction = Vector3.Dot(Vector3.Cross(lastProjected, projectedControllerVector), reelForward);
 
-        if(Mathf.Abs(direction) < float.Epsilon)
+        spinSpeed = Mathf.Min(5.0f, Mathf.Abs(angle - lastAngle) * 3.14f / 180 / Time.deltaTime);
+
+        if (Mathf.Abs(direction) < float.Epsilon)
         {
             spinDirection = SpinDirectionState.Idle;
         }
@@ -161,5 +167,6 @@ public class ReelSpin : MonoBehaviour
 
         // Update for next frame
         lastPosition = currentPosition;
+        lastAngle = angle;
     }
 }

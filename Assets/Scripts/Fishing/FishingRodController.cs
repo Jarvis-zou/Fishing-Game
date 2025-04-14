@@ -3,7 +3,7 @@ using UnityEngine;
 public class FishingRodController : MonoBehaviour
 {
     public float rodEndurance = 10.0f;
-
+    private float currentEndurance;
     private enum ActionState { Left, Right, Idle};
     private enum LineState { Tighten, Release, Idle};
 
@@ -20,11 +20,11 @@ public class FishingRodController : MonoBehaviour
 
     public HookThrower hookThrower;
 
-    public float maxLineLength = 20.0f;
-    public float minLineLength = 10.0f;
-    public float hookRetrieveThreshold = 5.0f;
-    public float lineMultiplier = 1.0f;
-    private float currentLineLength = 10.0f;
+    public float maxLineLength = 30.0f;
+    public float minLineLength = 15.0f;
+    public float hookRetrieveThreshold = 3.0f;
+    public float lineMultiplier = 5.0f;
+    private float currentLineLength;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -32,45 +32,69 @@ public class FishingRodController : MonoBehaviour
         actionState = ActionState.Idle;
         lineState = LineState.Idle;
         isFishing = false;
+        currentLineLength = minLineLength;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(currentLineLength <= hookRetrieveThreshold)
+        // need to compare fishing state
+        if (!isFishing)
         {
-            hookThrower.RetrieveHook();
-        }
-        if (lineState == LineState.Tighten)
-        {
-            currentLineLength -= Time.deltaTime * lineMultiplier;
-
-            if (!isFishing && hookThrower.GetHookState())
+            if (lineState != LineState.Idle)
             {
-                currentLineLength = Mathf.Max(currentLineLength, hookRetrieveThreshold);
+                hookThrower.SetLineLength(currentLineLength);
             }
-            else currentLineLength = Mathf.Max(currentLineLength, minLineLength);
+            if (currentLineLength <= hookRetrieveThreshold)
+            {
+                hookThrower.RetrieveHook();
+                hookThrower.SetLineLength(minLineLength);
+                currentLineLength = minLineLength;
+            }
+            if (lineState == LineState.Tighten)
+            {
+                currentLineLength -= Time.deltaTime * lineMultiplier * reelSpin.GetSpinSpeed();
+
+                //!isFishing &&
+                if (hookThrower.GetHookState())
+                {
+                    currentLineLength = Mathf.Max(currentLineLength, hookRetrieveThreshold);
+                }
+                else currentLineLength = Mathf.Max(currentLineLength, minLineLength);
+            }
+            else if (lineState == LineState.Release)
+            {
+                currentLineLength += Time.deltaTime * lineMultiplier * reelSpin.GetSpinSpeed();
+                currentLineLength = Mathf.Min(currentLineLength, maxLineLength);
+            }
         }
-        else if (lineState == LineState.Release) { 
-            currentLineLength += Time.deltaTime * lineMultiplier;
-            currentLineLength = Mathf.Min(currentLineLength, maxLineLength);
-        }
+
+        SetLineState();
 
         if (isFishing && fishTransform)
         {
-            CalculateDirection();
-            SetLineState();
+            CalculateDirection();    
         }
     }
 
-    public float GetRodEndurance()
+    public float GetEndurance()
     {
-        return rodEndurance;
+        return currentEndurance;
+    }
+
+    public void SetEndurance(float end)
+    {
+        currentEndurance = end;
     }
 
     public int[] GetOperationState()
     {
         return new int[] { (int)actionState, (int)lineState };
+    }
+
+    public float GetCurrentLineLength()
+    {
+        return currentLineLength;
     }
 
     public void SetFishTransform(Transform transform)
@@ -81,6 +105,8 @@ public class FishingRodController : MonoBehaviour
     public void SetFishing(bool fishing)
     {
         isFishing = fishing;
+        hookThrower.SetActive(!fishing);
+        currentEndurance = rodEndurance;
     }
 
     void CalculateDirection() {

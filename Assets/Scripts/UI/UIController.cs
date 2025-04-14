@@ -1,7 +1,4 @@
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using UnityEditor.Build.Content;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,8 +9,10 @@ public class UIController : MonoBehaviour
     [SerializeField] private Image greenBar;
     [SerializeField] private Image pointer;
     [SerializeField] private Image processBar;
+    [SerializeField] private Image rodBar;
 
     private FishingRodController rodController;
+    private IFishable fish;
     private Dictionary<int, float> greenBarLenMap = new Dictionary<int, float>
     {
         { 0, 100 },
@@ -21,11 +20,17 @@ public class UIController : MonoBehaviour
         { 2, 180 }
 
     };
-    private float pointerMoveSpeed = 100f;
-    private float minPointerX = -125f;
-    private float maxPointerX = 125f;
+    private float pointerMoveSpeed = 1f;
+    private float minPointerX = -1f;
+    private float maxPointerX = 1;
     private float progressFillDuration = 5f;
-    private float currentProgress = 0f;
+
+
+    private float currentProgress;
+    private float targetProgress;
+    private float currentEndurance;
+    private float maxEndurance;
+
 
     private void Start()
     {
@@ -34,8 +39,6 @@ public class UIController : MonoBehaviour
             Debug.LogError("Canvas reference not set!");
             return;
         }
-
-        FishController fishController = new FishController();
 
         // Hide Fishing UI as default
         HideUI();
@@ -48,6 +51,7 @@ public class UIController : MonoBehaviour
 
     private void UpdateComponents()
     {
+        if (fish == null) return;
         int[] operations = rodController.GetOperationState();
         int direction = operations[0];
         Vector2 currentPosition = pointer.rectTransform.anchoredPosition;
@@ -64,6 +68,7 @@ public class UIController : MonoBehaviour
         // Update pointer position
         pointer.rectTransform.anchoredPosition = new Vector2(newX, currentPosition.y);
 
+        UpdateGreen();
         // Get overlap
         bool isPointerInGreenBar = IsPointerInGreenBar(newX);
 
@@ -84,44 +89,76 @@ public class UIController : MonoBehaviour
 
     private void UpdateProgressBar(bool isInGreenBar)
     {
-        if (isInGreenBar)
-        {
-            currentProgress += Time.deltaTime / progressFillDuration;
-        }
-        else
-        {
-            currentProgress -= Time.deltaTime / progressFillDuration;
-        }
+        //if (isInGreenBar)
+        //{
+        //    currentProgress += Time.deltaTime / progressFillDuration;
+        //}
+        //else
+        //{
+        //    currentProgress -= Time.deltaTime / progressFillDuration;
+        //}
 
-        currentProgress = Mathf.Clamp01(currentProgress);
-        processBar.fillAmount = currentProgress;
+        //currentProgress = Mathf.Clamp01(currentProgress);
+        //processBar.fillAmount = currentProgress;
 
-        if (currentProgress >= 1.0f)
-        {
-            Debug.Log("ProgressBar reaches 100%!!!!");
-        }
+        //if (currentProgress >= 1.0f)
+        //{
+        //    //Debug.Log("ProgressBar reaches 100%!!!!");
+        //}
+        currentProgress = targetProgress - fish.GetStamina();
+        processBar.fillAmount = currentProgress / targetProgress;
+
+        currentEndurance = rodController.GetEndurance();
+        rodBar.fillAmount = currentEndurance / maxEndurance;
     }
 
+    private void UpdateGreen()
+    {
+        Vector2 greenPosition = greenBar.rectTransform.anchoredPosition;
+        float newX = greenPosition.x;
+
+        int[] fishops = fish.GetFishState();
+        if (fishops[0] == 0) // rod moving left
+        {
+            newX -= pointerMoveSpeed * Time.deltaTime;
+        }
+        else if (fishops[0] == 1)
+        {  // rod moving right
+            newX += pointerMoveSpeed * Time.deltaTime;
+        }
+
+        newX = Mathf.Clamp(newX, minPointerX, maxPointerX);
+
+        // Update pointer position
+        greenBar.rectTransform.anchoredPosition = new Vector2(newX, greenPosition.y);
+
+    }
     public void initUI(IFishable fish, FishingRodController rodCtrl)
     {
+        this.fish = fish;
+
         rodController = rodCtrl;
         int fishType = fish.GetFishType();
-        float width = greenBarLenMap[fishType];
-        greenBar.rectTransform.sizeDelta = new Vector2(width, 15);
+        //float width = greenBarLenMap[fishType];
+        //greenBar.rectTransform.sizeDelta = new Vector2(width, 15);
 
 
         // Init greenBar position
-        float minX = -125 + width / 2;
-        float maxX = 125 - width / 2;
-        float randomX = UnityEngine.Random.Range(minX, maxX);
-        greenBar.rectTransform.anchoredPosition = new Vector2(randomX, 250);
+        //float minX = -125 + width / 2;
+        //float maxX = 125 - width / 2;
+        //float randomX = UnityEngine.Random.Range(minX, maxX);
+        //greenBar.rectTransform.anchoredPosition = new Vector2(randomX, 250);
 
         // Init Pointer position
-        minX = -125;
-        maxX = 125;
-        randomX = UnityEngine.Random.Range(minX, maxX);
-        pointer.rectTransform.anchoredPosition = new Vector2(randomX, 250);
+        //minX = -125;
+        //maxX = 125;
+        //randomX = UnityEngine.Random.Range(minX, maxX);
+        //pointer.rectTransform.anchoredPosition = new Vector2(randomX, 250);
 
+        targetProgress = fish.GetStamina();
+        currentProgress = 0;
+        maxEndurance = rodController.GetEndurance();
+        currentEndurance = maxEndurance;
     }
 
     public void ShowUI()

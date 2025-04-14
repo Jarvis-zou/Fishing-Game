@@ -5,10 +5,10 @@ public class LineVisualizer : MonoBehaviour
 {
     public Transform rodTip;
     private Transform hook;
-    public float slack = 0.5f; // for a sagging curve effect
+    public float slack = 0.3f; // for a sagging curve effect
 
     private LineRenderer line;
-    public float lineWidth = 0.01f;
+    public float lineWidth = 0.02f;
 
     void Awake()
     {
@@ -20,7 +20,19 @@ public class LineVisualizer : MonoBehaviour
 
     void Update()
     {
-        if (rodTip == null || hook == null) return;
+        if (rodTip == null || hook == null)
+        {
+            if (line.positionCount != 0)
+                line.positionCount = 0; // Clear the line when hook is null
+            return;
+        }
+
+        if (line.positionCount == 0)
+        {
+            line.positionCount = 20; // Restore the default when hook is set again
+            line.startWidth = lineWidth;
+            line.endWidth = lineWidth;
+        }
 
         Vector3 start = rodTip.position;
         Vector3 end = hook.position;
@@ -39,4 +51,15 @@ public class LineVisualizer : MonoBehaviour
     { 
         hook = t; 
     }
+
+    public void SetSlack(float slack)
+    {
+        this.slack = slack;
+    }
+
+    public void ResetSlack()
+    {
+        slack = 0.3f;
+    }
+
 }

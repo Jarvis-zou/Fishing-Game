@@ -5,9 +5,12 @@ public class DebugSetup : MonoBehaviour
     public DebugPanelController debugPanelController;
     public FishingRodController fishingRodController;
     public FishingManager fishingManager;
+    public HookThrower hookThrower;
 
     void Start()
     {
+        debugPanelController.Register(() => $"HookState: {hookThrower.GetHookState()}");
+        debugPanelController.Register(() => $"LineLength: {fishingRodController.GetCurrentLineLength()}");
         debugPanelController.Register(() => $"Manager State: {fishingManager.GetManagerState()}");
         debugPanelController.Register(() =>
         {

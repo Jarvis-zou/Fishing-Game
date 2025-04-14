@@ -1,5 +1,56 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &330424274957606839
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6204129876094728930}
+  - component: {fileID: 8639691462110855133}
+  m_Layer: 0
+  m_Name: SpeedRef
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6204129876094728930
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330424274957606839}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 7, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5275676780551583456}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8639691462110855133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330424274957606839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93f1a92e4f5798a46995e23c27237238, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hookPrefab: {fileID: 5366755517654607712, guid: b156cd07e0c04264db3478893dad5852, type: 3}
+  hookSpawnPoint: {fileID: 3766410862735749080}
+  cameraTransform: {fileID: 0}
+  rodGrabListener: {fileID: 1626044909688171779}
+  castMultiplier: 5
+  swingThreshold: 3
+  lineVisualizer: {fileID: 989337678777068190}
 --- !u!1 &1046827641065410671
 GameObject:
   m_ObjectHideFlags: 0
@@ -74,7 +125,6 @@ GameObject:
   - component: {fileID: 5908420373525751954}
   - component: {fileID: 103334803493592902}
   - component: {fileID: 7609901911013933729}
-  - component: {fileID: 2633878435268564570}
   m_Layer: 0
   m_Name: ThreadPoint
   m_TagString: Untagged
@@ -112,7 +162,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6097825187932661182}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -173,23 +223,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2633878435268564570
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6097825187932661182}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93f1a92e4f5798a46995e23c27237238, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hookPrefab: {fileID: 9164418196966963717, guid: 1cca1139c5f22684cb5b1eda70cd3e9b, type: 3}
-  hookSpawnPoint: {fileID: 3766410862735749080}
-  castMultiplier: 5
-  swingThreshold: 3
-  lineVisualizer: {fileID: 989337678777068190}
 --- !u!1 &6136615684265660339
 GameObject:
   m_ObjectHideFlags: 0
@@ -311,7 +344,7 @@ GameObject:
   - component: {fileID: 4019638287565063664}
   m_Layer: 0
   m_Name: AdjustedRod
-  m_TagString: Untagged
+  m_TagString: FishingRod
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -345,9 +378,10 @@ GameObject:
   - component: {fileID: 8831662442162040510}
   - component: {fileID: 6137353626554290626}
   - component: {fileID: 1437307404137204535}
+  - component: {fileID: 1626044909688171779}
   m_Layer: 0
   m_Name: RodHandle
-  m_TagString: Untagged
+  m_TagString: FishingRod
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -367,6 +401,7 @@ Transform:
   m_Children:
   - {fileID: 3211409800481093458}
   - {fileID: 3766410862735749080}
+  - {fileID: 6204129876094728930}
   m_Father: {fileID: 4019638287565063664}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &4336802168821088066
@@ -562,6 +597,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.3, y: 1, z: 0.3}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1626044909688171779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9150224313943834610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 464a8fb1bd7765e4887cdd81dc2a0bb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3106218546978312377
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -576,11 +623,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1a0a025d6c6a83a49bcb4d8680a40ca7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.2
+      value: -0.015
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1a0a025d6c6a83a49bcb4d8680a40ca7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1
+      value: 0.967
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1a0a025d6c6a83a49bcb4d8680a40ca7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -670,7 +717,7 @@ MonoBehaviour:
   controller: {fileID: 0}
   spinRef: {fileID: 8771916025758724778}
   reelKnob: {fileID: 8692906939240624340}
-  interactionRadius: 0.1
+  interactionRadius: 0.15
   rotationMultiplier: 1
   triggerAction: {fileID: -5982496924579745919, guid: c348712bda248c246b8c49b3db54643f, type: 3}
 --- !u!1 &2871863479773588968 stripped
@@ -864,6 +911,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rodTip: {fileID: 8966337829170232196}
   slack: 0.5
+  lineWidth: 0.01
 --- !u!4 &3211409800481093458 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1a0a025d6c6a83a49bcb4d8680a40ca7, type: 3}

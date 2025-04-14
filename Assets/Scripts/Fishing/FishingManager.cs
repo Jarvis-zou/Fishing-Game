@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Networking;
 
 public class FishingManager : MonoBehaviour
 {
@@ -16,7 +15,6 @@ public class FishingManager : MonoBehaviour
     private FishingState currentState = FishingState.Idle;
 
     private float rodEndurance = 0;
-    private float endurance = 0;
 
     // Set up the instance
     private void Awake()
@@ -33,13 +31,13 @@ public class FishingManager : MonoBehaviour
     void Start()
     {
         // Maybe register events from rod and fish
-        rodEndurance = rodController.GetRodEndurance();
     }
 
     private void Update()
     {
         if (currentFish != null)
         {
+            float endurance = rodController.GetEndurance();
             if (endurance <= 0)
             {
                 OnCatchFail();
@@ -50,8 +48,9 @@ public class FishingManager : MonoBehaviour
             bool correct = currentFish.CheckInput(operations[0], operations[1] == 0);
             if (!correct)
             {
-                endurance -= Time.deltaTime;
+                rodController.SetEndurance(endurance - Time.deltaTime);
             }
+
 
             int[] fishState = currentFish.GetFishState();
             if (fishState[1] == 1)
@@ -70,7 +69,6 @@ public class FishingManager : MonoBehaviour
         currentFish = fish;
         currentState = FishingState.Hooked;
         // Change FSM state, UI update, etc.
-        endurance = rodEndurance;
         rodController.SetFishing(true);
         rodController.SetFishTransform((currentFish as MonoBehaviour)?.transform);
 
@@ -80,7 +78,7 @@ public class FishingManager : MonoBehaviour
         }
 
         // Display game UI after hooked
-        initUI(currentFish, rodController);
+        InitUI(fish, rodController);
     }
 
     public IFishable GetCurrentFish()
@@ -102,7 +100,7 @@ public class FishingManager : MonoBehaviour
 
     public float GetEndurance()
     {
-        return endurance;
+        return rodController.GetEndurance();
     }
 
     public string GetManagerState()
@@ -120,6 +118,7 @@ public class FishingManager : MonoBehaviour
         {
             bendController.SetHooked(false);
         }
+        uiController.HideUI();
         // Trigger animation, show UI, etc.
     }
 
@@ -134,10 +133,12 @@ public class FishingManager : MonoBehaviour
         {
             bendController.SetHooked(false);
         }
+
+        uiController.HideUI();
         // Reset or trigger feedback
     }
 
-    public void initUI(IFishable fish, FishingRodController rodController)
+    public void InitUI(IFishable fish, FishingRodController rodController)
     {
         uiController.initUI(fish, rodController);
         uiController.ShowUI();

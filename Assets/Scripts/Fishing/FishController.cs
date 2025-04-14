@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class FishController : MonoBehaviour, IFishable
 {
-    private float stamina = 0;
+    private float stamina;
     private bool hooked = false;
 
     private enum Direction { Left, Right, Stay }
@@ -12,11 +12,11 @@ public class FishController : MonoBehaviour, IFishable
     private bool isFighting;
 
     private float directionTimer = 0f;
-    private float directionDuration = 2f;
+    private float directionDuration = 4f;
 
     public void OnCaught()
     {
-        isFighting = true;
+        isFighting = false;
         hooked = false;
         FishingManager.Instance.OnCatchSuccess();
         //Debug.Log("Fish caught");
@@ -36,7 +36,7 @@ public class FishController : MonoBehaviour, IFishable
     }
 
 
-    void Start()
+    void Awake()
     {
         stamina = 10.0f;
     }   
@@ -71,8 +71,10 @@ public class FishController : MonoBehaviour, IFishable
 
     void GenerateNewDirection()
     {
-        int dir = Random.Range(0, 3); // 0 = Left, 1 = Right, 2 = Stay
-        currentDirection = (Direction)dir;
+        int dir = Random.Range(0, 7); // 0 - 2 = Left, 3 - 5 = Right, 6 = Stay
+        if (dir <= 2) currentDirection = currentDirection == Direction.Left ? Direction.Right : Direction.Left;
+        else if (dir <= 5) currentDirection = currentDirection == Direction.Right ? Direction.Left : Direction.Right;
+        else currentDirection = Direction.Stay;
     }
 
     void GenerateFighting() { 
@@ -110,7 +112,7 @@ public class FishController : MonoBehaviour, IFishable
     {
         int length = System.Enum.GetValues(typeof(FishType)).Length;
 
-        return UnityEngine.Random.Range(0, length);
+        return Random.Range(0, length);
     }
 
 }
