@@ -77,7 +77,7 @@ public class FishController : MonoBehaviour, IFishable
     void GenerateFighting() { 
         int v = Random.Range(1, 11);
         if (v <= 3) isFighting = true;
-        isFighting = false;
+        else isFighting = false;
     }
 
     public bool CheckInput(int direction, bool shrink) { 

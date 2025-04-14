@@ -18,6 +18,14 @@ public class FishingRodController : MonoBehaviour
     [SerializeField]
     Transform xrOriginTransform;
 
+    public HookThrower hookThrower;
+
+    public float maxLineLength = 20.0f;
+    public float minLineLength = 10.0f;
+    public float hookRetrieveThreshold = 5.0f;
+    public float lineMultiplier = 1.0f;
+    private float currentLineLength = 10.0f;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -29,6 +37,25 @@ public class FishingRodController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(currentLineLength <= hookRetrieveThreshold)
+        {
+            hookThrower.RetrieveHook();
+        }
+        if (lineState == LineState.Tighten)
+        {
+            currentLineLength -= Time.deltaTime * lineMultiplier;
+
+            if (!isFishing && hookThrower.GetHookState())
+            {
+                currentLineLength = Mathf.Max(currentLineLength, hookRetrieveThreshold);
+            }
+            else currentLineLength = Mathf.Max(currentLineLength, minLineLength);
+        }
+        else if (lineState == LineState.Release) { 
+            currentLineLength += Time.deltaTime * lineMultiplier;
+            currentLineLength = Mathf.Min(currentLineLength, maxLineLength);
+        }
+
         if (isFishing && fishTransform)
         {
             CalculateDirection();

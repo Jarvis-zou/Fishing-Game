@@ -6,6 +6,8 @@ public class FishingManager : MonoBehaviour
     public static FishingManager Instance { get; private set; }
 
     [SerializeField] private FishingRodController rodController;
+    [SerializeField] private RodBendController bendController;
+
     private IFishable currentFish;
 
     private enum FishingState { Idle, Hooked, Caught, Failed }
@@ -48,6 +50,16 @@ public class FishingManager : MonoBehaviour
             {
                 endurance -= Time.deltaTime;
             }
+
+            int[] fishState = currentFish.GetFishState();
+            if (fishState[1] == 1)
+            {
+                bendController.SetIsFighting(true);
+            }
+            else
+            {
+                bendController.SetIsFighting(false);
+            }
         }
     }
 
@@ -59,6 +71,11 @@ public class FishingManager : MonoBehaviour
         endurance = rodEndurance;
         rodController.SetFishing(true);
         rodController.SetFishTransform((currentFish as MonoBehaviour)?.transform);
+
+        if (bendController)
+        {
+            bendController.SetHooked(true);
+        }
     }
 
     public IFishable GetCurrentFish()
@@ -94,6 +111,10 @@ public class FishingManager : MonoBehaviour
         currentFish = null;
         rodController.SetFishing(false);
         rodController.SetFishTransform(null);
+        if (bendController)
+        {
+            bendController.SetHooked(false);
+        }
         // Trigger animation, show UI, etc.
     }
 
@@ -103,7 +124,11 @@ public class FishingManager : MonoBehaviour
         currentFish.OnEscaped();
         currentFish = null;
         rodController.SetFishing(false);
-        rodController.SetFishTransform(null) ;
+        rodController.SetFishTransform(null);
+        if (bendController)
+        {
+            bendController.SetHooked(false);
+        }
         // Reset or trigger feedback
     }
 }

@@ -620,6 +620,17 @@ Transform:
   - {fileID: 1865672362}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &320146454 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1612767604136893581, guid: 9ec10d78b970ce349aba3c2ee3d15bf1, type: 3}
+  m_PrefabInstance: {fileID: 1439854211}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca141a0ad4f410941a8fa93a5389f08f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &385467475 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6961854119965240234, guid: 67de17aaa6711224f80123d9b1ef8cb7, type: 3}
@@ -718,6 +729,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 603645472}
   m_SourcePrefab: {fileID: 100100000, guid: b8054f1201b0b450dbfef64dcd0c200b, type: 3}
+--- !u!114 &423174949 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2633878435268564570, guid: 9ec10d78b970ce349aba3c2ee3d15bf1, type: 3}
+  m_PrefabInstance: {fileID: 1439854211}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93f1a92e4f5798a46995e23c27237238, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &427961346
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1609,7 +1631,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 1, z: 5}
+  m_LocalScale: {x: 10, y: 1, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1863,6 +1885,11 @@ MonoBehaviour:
   rodEndurance: 10
   reelSpin: {fileID: 1114704741}
   xrOriginTransform: {fileID: 286662621}
+  hookThrower: {fileID: 423174949}
+  maxLineLength: 20
+  minLineLength: 10
+  hookRetrieveThreshold: 5
+  lineMultiplier: 1
 --- !u!1001 &1486573813
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2059,6 +2086,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rodController: {fileID: 1439854213}
+  bendController: {fileID: 320146454}
 --- !u!4 &1595071783
 Transform:
   m_ObjectHideFlags: 0
@@ -2293,7 +2321,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6598815579406187037, guid: 18ddb545287c546e19cc77dc9fbb2189, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
