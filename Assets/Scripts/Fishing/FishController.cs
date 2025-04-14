@@ -6,6 +6,7 @@ public class FishController : MonoBehaviour, IFishable
     private bool hooked = false;
 
     private enum Direction { Left, Right, Stay }
+    private enum FishType { fish1, fish2, fish3 }
 
     private Direction currentDirection;
     private bool isFighting;
@@ -103,6 +104,13 @@ public class FishController : MonoBehaviour, IFishable
     public int[] GetFishState()
     {
         return new int[] {(int)currentDirection, isFighting ? 1: 0};
+    }
+
+    public int GetFishType()
+    {
+        int length = System.Enum.GetValues(typeof(FishType)).Length;
+
+        return UnityEngine.Random.Range(0, length);
     }
 
 }
