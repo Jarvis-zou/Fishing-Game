@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class FishingManager : MonoBehaviour
 {
@@ -6,6 +7,7 @@ public class FishingManager : MonoBehaviour
     public static FishingManager Instance { get; private set; }
 
     [SerializeField] private FishingRodController rodController;
+    [SerializeField] private UIController uiController;
     private IFishable currentFish;
 
     private enum FishingState { Idle, Hooked, Caught, Failed }
@@ -59,6 +61,9 @@ public class FishingManager : MonoBehaviour
         endurance = rodEndurance;
         rodController.SetFishing(true);
         rodController.SetFishTransform((currentFish as MonoBehaviour)?.transform);
+
+        // Display game UI after hooked
+        initUI(fish, rodController);
     }
 
     public IFishable GetCurrentFish()
@@ -105,5 +110,11 @@ public class FishingManager : MonoBehaviour
         rodController.SetFishing(false);
         rodController.SetFishTransform(null) ;
         // Reset or trigger feedback
+    }
+
+    public void initUI(IFishable fish, FishingRodController rodController)
+    {
+        uiController.initUI(fish, rodController);
+        uiController.ShowUI();
     }
 }
