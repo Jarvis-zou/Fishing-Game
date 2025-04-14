@@ -63,7 +63,7 @@ public class FishingManager : MonoBehaviour
         rodController.SetFishTransform((currentFish as MonoBehaviour)?.transform);
 
         // Display game UI after hooked
-        initUI(fish, rodController);
+        initUI(currentFish, rodController);
     }
 
     public IFishable GetCurrentFish()
