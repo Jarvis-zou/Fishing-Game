@@ -11,7 +11,7 @@ public class ReelSpin : MonoBehaviour
 
     [SerializeField] private InputActionReference triggerAction;
 
-
+    private ReelAudioController reelAudioController;
     private bool isInteracting = false;
     private Vector3 lastPosition;
     private enum SpinDirectionState { Clockwise, CounterClockwise, Idle};
@@ -39,6 +39,7 @@ public class ReelSpin : MonoBehaviour
             triggerAction.action.canceled += OnTriggerCanceled;
             spinDirection = SpinDirectionState.Idle;
             lastPosition = transform.position;
+            reelAudioController = GetComponent<ReelAudioController>();
         }
     }
 
@@ -62,6 +63,10 @@ public class ReelSpin : MonoBehaviour
         if (isInteracting && distance < interactionRadius * 1.5f) // Give a bit more leeway once interaction starts
         {
             RotateReelBasedOnControllerMovement();
+            if (reelAudioController != null)
+            {
+                reelAudioController.SetSpinState((int)spinDirection);
+            }
         }
         else if (isInteracting)
         {
