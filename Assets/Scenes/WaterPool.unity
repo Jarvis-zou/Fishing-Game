@@ -4990,6 +4990,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5762084182453171027, guid: 4825ca021a3a8d34594607b2b14e153d, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f104cbb6fe150724881dbd461e5949d9, type: 2}
     - target: {fileID: 7424461543885341978, guid: 4825ca021a3a8d34594607b2b14e153d, type: 3}
       propertyPath: m_Name
       value: WaterCube
