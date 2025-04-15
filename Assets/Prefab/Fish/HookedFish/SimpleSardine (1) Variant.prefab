@@ -1,0 +1,96 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &250655926914959260
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4882435817308568231, guid: c0aaef693a81845489ae22bd09b9b558, type: 3}
+      propertyPath: m_Name
+      value: SimpleSardine (1) Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 4882435817308792455, guid: c0aaef693a81845489ae22bd09b9b558, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 4882435817308792455, guid: c0aaef693a81845489ae22bd09b9b558, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.43
+      objectReference: {fileID: 0}
+    - target: {fileID: 4882435817308792455, guid: c0aaef693a81845489ae22bd09b9b558, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.82
+      objectReference: {fileID: 0}
+    - target: {fileID: 4882435817308792455, guid: c0aaef693a81845489ae22bd09b9b558, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.63421607
+      objectReference: {fileID: 0}
+    - target: {fileID: 4882435817308792455, guid: c0aaef693a81845489ae22bd09b9b558, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4882435817308792455, guid: c0aaef693a81845489ae22bd09b9b558, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.77315587
+      objectReference: {fileID: 0}
+    - target: {fileID: 4882435817308792455, guid: c0aaef693a81845489ae22bd09b9b558, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4882435817308792455, guid: c0aaef693a81845489ae22bd09b9b558, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4882435817308792455, guid: c0aaef693a81845489ae22bd09b9b558, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -101.276
+      objectReference: {fileID: 0}
+    - target: {fileID: 4882435817308792455, guid: c0aaef693a81845489ae22bd09b9b558, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 1190455083150805999, guid: c0aaef693a81845489ae22bd09b9b558, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4882435817308568231, guid: c0aaef693a81845489ae22bd09b9b558, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -1469948450309477755}
+    - targetCorrespondingSourceObject: {fileID: 4882435817308568231, guid: c0aaef693a81845489ae22bd09b9b558, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -7640288353750032622}
+  m_SourcePrefab: {fileID: 100100000, guid: c0aaef693a81845489ae22bd09b9b558, type: 3}
+--- !u!1 &4664435901555735867 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4882435817308568231, guid: c0aaef693a81845489ae22bd09b9b558, type: 3}
+  m_PrefabInstance: {fileID: 250655926914959260}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &-1469948450309477755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4664435901555735867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac0e8b20dbd9245438b6814c3640008c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SelfFishPrefab: {fileID: 4664435901555735867}
+--- !u!114 &-7640288353750032622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4664435901555735867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d650931aa3318504bad8a332e9e6482b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class FishController : MonoBehaviour, IFishable
 {
+    [SerializeField] private GameObject SelfFishPrefab;
+
     private float stamina;
     private bool hooked = false;
 
@@ -115,4 +117,8 @@ public class FishController : MonoBehaviour, IFishable
         return Random.Range(0, length);
     }
 
+    public GameObject GetCaughtFishPrefab()
+    {
+        return SelfFishPrefab;
+    }
 }

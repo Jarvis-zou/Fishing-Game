@@ -15,8 +15,7 @@ public class FishingRodController : MonoBehaviour
 
     [SerializeField] private ReelSpin reelSpin;
 
-    [SerializeField]
-    Transform xrOriginTransform;
+    [SerializeField] private Transform xrOriginTransform;
 
     public HookThrower hookThrower;
 
@@ -77,6 +76,11 @@ public class FishingRodController : MonoBehaviour
         }
     }
 
+    public Transform GetXROriginTransform()
+    {
+        return xrOriginTransform;
+    }
+
     public float GetEndurance()
     {
         return currentEndurance;
@@ -100,6 +104,17 @@ public class FishingRodController : MonoBehaviour
     public void SetFishTransform(Transform transform)
     {
         fishTransform = transform;
+    }
+
+    public void SetFishCaught(GameObject fishCaught)
+    {
+        GameObject hook = hookThrower.GetCurrentHook();
+        if (hook == null) return;
+        HookController hookController = hook.GetComponent<HookController>();
+        if (hookController != null)
+        {
+            hookController.SetFish(fishCaught);
+        }
     }
 
     public void SetFishing(bool fishing)

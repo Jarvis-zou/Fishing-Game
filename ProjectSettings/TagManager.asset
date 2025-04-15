@@ -6,6 +6,7 @@ TagManager:
   tags:
   - FishingRod
   - Hook
+  - Water
   layers:
   - Default
   - TransparentFX

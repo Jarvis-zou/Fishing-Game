@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public interface IFishable
 {
     void OnHooked();
@@ -8,5 +10,7 @@ public interface IFishable
     int[] GetFishState();
 
     int GetFishType();
+
+    GameObject GetCaughtFishPrefab();
 }
 

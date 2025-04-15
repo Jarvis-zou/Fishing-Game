@@ -94,6 +94,8 @@ public class HookThrower : MonoBehaviour
     {
         hookReleased = false;
         lineVisualizer.SetTransform(null);
+        HookController hookController = currentHook.GetComponent<HookController>();
+        if (hookController != null) { hookController.Clear(); }
         Destroy(currentHook);
     }
 
@@ -124,6 +126,11 @@ public class HookThrower : MonoBehaviour
         Vector3 force = distance * pullForce * pullDir;
         Vector3 damp = hookRigidbody.linearVelocity * 0.1f;
         hookRigidbody.AddForce (force - damp, ForceMode.Impulse);
+    }
+
+    public GameObject GetCurrentHook()
+    {
+        return currentHook;
     }
 
     public void PullHookLeft()

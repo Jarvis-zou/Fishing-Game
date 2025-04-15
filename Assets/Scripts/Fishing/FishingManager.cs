@@ -9,12 +9,13 @@ public class FishingManager : MonoBehaviour
     [SerializeField] private RodBendController bendController;
 
     [SerializeField] private UIController uiController;
+    //[SerializeField] Transform xrOriginTransform;
     private IFishable currentFish;
 
     private enum FishingState { Idle, Hooked, Caught, Failed }
     private FishingState currentState = FishingState.Idle;
 
-    private float rodEndurance = 0;
+    //private float rodEndurance = 0;
 
     // Set up the instance
     private void Awake()
@@ -81,6 +82,11 @@ public class FishingManager : MonoBehaviour
         InitUI(fish, rodController);
     }
 
+    public FishingRodController GetFishingRodController()
+    {
+        return rodController;
+    }
+
     public IFishable GetCurrentFish()
     {
         return currentFish;
@@ -111,15 +117,23 @@ public class FishingManager : MonoBehaviour
     public void OnCatchSuccess()
     {
         currentState = FishingState.Caught;
-        currentFish = null;
+        
         rodController.SetFishing(false);
         rodController.SetFishTransform(null);
+        GameObject fishCaughtPrefab = currentFish.GetCaughtFishPrefab();
+        if(fishCaughtPrefab != null)
+        {
+            GameObject fishCaught = Instantiate(fishCaughtPrefab);
+            rodController.SetFishCaught(fishCaught);
+        }
+        
         if (bendController)
         {
             bendController.SetHooked(false);
         }
         uiController.HideUI();
         // Trigger animation, show UI, etc.
+        currentFish = null;
     }
 
     public void OnCatchFail()
