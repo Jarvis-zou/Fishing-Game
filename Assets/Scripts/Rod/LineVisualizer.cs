@@ -5,7 +5,7 @@ public class LineVisualizer : MonoBehaviour
 {
     public Transform rodTip;
     private Transform hook;
-    public float slack = 0.3f; // for a sagging curve effect
+    public float slack = 0.3f;
 
     private LineRenderer line;
     public float lineWidth = 0.02f;
@@ -23,13 +23,13 @@ public class LineVisualizer : MonoBehaviour
         if (rodTip == null || hook == null)
         {
             if (line.positionCount != 0)
-                line.positionCount = 0; // Clear the line when hook is null
+                line.positionCount = 0;
             return;
         }
 
         if (line.positionCount == 0)
         {
-            line.positionCount = 20; // Restore the default when hook is set again
+            line.positionCount = 20;
             line.startWidth = lineWidth;
             line.endWidth = lineWidth;
         }
@@ -37,7 +37,6 @@ public class LineVisualizer : MonoBehaviour
         Vector3 start = rodTip.position;
         Vector3 end = hook.position;
 
-        // Fake a curve using interpolation + gravity sag
         for (int i = 0; i < line.positionCount; i++)
         {
             float t = i / (float)(line.positionCount - 1);

@@ -1,8 +1,8 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class HookController : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     private GameObject fish;
 
     public AudioClip splashSound;
@@ -17,13 +17,13 @@ public class HookController : MonoBehaviour
     {
         fish = obj;
 
+        float yOffset = 0.5f;
+        fish.transform.position = new Vector3(transform.position.x, transform.position.y - yOffset, transform.position.z);
+        
         fish.transform.SetParent(transform);
 
         fish.transform.localRotation = Quaternion.identity;
-        fish.transform.localScale = fish.transform.localScale * 0.2f;
-
-        float yOffset = -fish.transform.localScale.y / 2f - 0.1f;
-        fish.transform.localPosition = new Vector3(0, -yOffset, 0);
+        fish.transform.localScale = fish.transform.localScale * 0.5f;
         Animator animator = fish.GetComponent<Animator>();
         if (animator != null) animator.enabled = false;
     }
@@ -38,11 +38,13 @@ public class HookController : MonoBehaviour
         if (fish != null) Destroy(fish);
     }
 
-    void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("Water"))
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (other.gameObject.CompareTag("Water") && rb.linearVelocity.magnitude >= 3.0f)
         {
             audioSource.PlayOneShot(splashSound);
         }
     }
+
 }

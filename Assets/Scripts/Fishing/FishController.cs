@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.XR;
 
 public class FishController : MonoBehaviour, IFishable
 {
@@ -21,13 +22,11 @@ public class FishController : MonoBehaviour, IFishable
         isFighting = false;
         hooked = false;
         FishingManager.Instance.OnCatchSuccess();
-        //Debug.Log("Fish caught");
         Destroy(gameObject);
     }
 
     public void OnEscaped()
     {
-        //Debug.Log("Fish escaped");
         Destroy(gameObject);
     }
 
@@ -64,11 +63,8 @@ public class FishController : MonoBehaviour, IFishable
             GenerateNewDirection();
             directionTimer = directionDuration;
             GenerateFighting();
-            //Debug.Log("Fish moves: " + currentDirection);
-            //Debug.Log("Fish Fighting: " + isFighting);
+
         }
-        // optionally, check for success/failure conditions
-        // e.g., if player fails to respond to direction in time
     }
 
     void GenerateNewDirection()
@@ -81,7 +77,10 @@ public class FishController : MonoBehaviour, IFishable
 
     void GenerateFighting() { 
         int v = Random.Range(1, 11);
-        if (v <= 3) isFighting = true;
+        if (v <= 3) { 
+            isFighting = true;
+            SendHaptic();
+        }
         else isFighting = false;
     }
 
@@ -120,5 +119,18 @@ public class FishController : MonoBehaviour, IFishable
     public GameObject GetCaughtFishPrefab()
     {
         return SelfFishPrefab;
+    }
+
+    public XRNode xrNode = XRNode.RightHand; 
+    [Range(0, 1)] public float amplitude = 0.5f;
+    public float duration = 0.1f;
+
+    public void SendHaptic()
+    {
+        UnityEngine.XR.InputDevice device = InputDevices.GetDeviceAtXRNode(xrNode);
+        if (device.isValid && device.TryGetHapticCapabilities(out var capabilities) && capabilities.supportsImpulse)
+        {
+            device.SendHapticImpulse(0, amplitude, duration);
+        }
     }
 }

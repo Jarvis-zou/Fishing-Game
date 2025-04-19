@@ -9,20 +9,18 @@ public class FishingManager : MonoBehaviour
     [SerializeField] private RodBendController bendController;
 
     [SerializeField] private UIController uiController;
-    //[SerializeField] Transform xrOriginTransform;
+
     private IFishable currentFish;
 
     private enum FishingState { Idle, Hooked, Caught, Failed }
     private FishingState currentState = FishingState.Idle;
 
-    //private float rodEndurance = 0;
 
-    // Set up the instance
     private void Awake()
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(this.gameObject); // Prevent duplicates
+            Destroy(this.gameObject); 
             return;
         }
 
@@ -31,7 +29,6 @@ public class FishingManager : MonoBehaviour
 
     void Start()
     {
-        // Maybe register events from rod and fish
     }
 
     private void Update()
@@ -44,7 +41,6 @@ public class FishingManager : MonoBehaviour
                 OnCatchFail();
                 return;
             }
-            // find the rod
             int[] operations = rodController.GetOperationState();
             bool correct = currentFish.CheckInput(operations[0], operations[1] == 0);
             if (!correct)
@@ -69,7 +65,6 @@ public class FishingManager : MonoBehaviour
     {
         currentFish = fish;
         currentState = FishingState.Hooked;
-        // Change FSM state, UI update, etc.
         rodController.SetFishing(true);
         rodController.SetFishTransform((currentFish as MonoBehaviour)?.transform);
 
@@ -78,7 +73,6 @@ public class FishingManager : MonoBehaviour
             bendController.SetHooked(true);
         }
 
-        // Display game UI after hooked
         InitUI(fish, rodController);
     }
 
@@ -132,7 +126,6 @@ public class FishingManager : MonoBehaviour
             bendController.SetHooked(false);
         }
         uiController.HideUI();
-        // Trigger animation, show UI, etc.
         currentFish = null;
     }
 
@@ -149,7 +142,6 @@ public class FishingManager : MonoBehaviour
         }
 
         uiController.HideUI();
-        // Reset or trigger feedback
     }
 
     public void InitUI(IFishable fish, FishingRodController rodController)

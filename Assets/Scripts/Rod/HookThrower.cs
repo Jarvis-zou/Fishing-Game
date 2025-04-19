@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
 using UnityEngine.InputSystem;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class HookThrower : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class HookThrower : MonoBehaviour
     private GameObject currentHook;
     private Rigidbody hookRigidbody;
 
-    public float castMultiplier = 5f;         // Adjust this for casting strength
+    public float castMultiplier = 5f;
     public float swingThreshold = 30.0f;
 
     private Vector3 previousRodTipPosition;
@@ -41,8 +42,6 @@ public class HookThrower : MonoBehaviour
             float currentLength = Vector3.Distance(transform.position, currentHook.transform.position);
             if(currentLength >= lineLength)
             {
-                //Debug.Log("pulled");
-                //Debug.Log(currentLength);
                 PullHookBack(currentLength - lineLength);
             }
         }
@@ -50,11 +49,8 @@ public class HookThrower : MonoBehaviour
         Vector3 rodVelocity = CalculateVelocity();
         if(rodVelocity.magnitude > swingThreshold && !hookReleased && rodGrabListener.GetIsGrabbed())
         {
-            //Debug.Log(rodVelocity.magnitude);
             CastHook(rodVelocity);
-            //Debug.Log("Casted");
         }
-        // Update rod tip position for velocity calculation
         previousRodTipPosition = transform.position;
     }
 
@@ -67,6 +63,7 @@ public class HookThrower : MonoBehaviour
     void CastHook(Vector3 rodVelocity)
     {
         if (hookPrefab == null || hookSpawnPoint == null) return;
+
         // Compute direction and apply force
         Vector3 directionToHook = (hookSpawnPoint.position - transform.position).normalized;
         Vector3 flingDirection = Vector3.ProjectOnPlane(rodVelocity, directionToHook).normalized;
@@ -88,6 +85,7 @@ public class HookThrower : MonoBehaviour
         hookReleased = true;
 
         lineVisualizer.SetTransform(currentHook.transform);
+        SendHaptic();
     }
 
     public void RetrieveHook()
@@ -117,12 +115,6 @@ public class HookThrower : MonoBehaviour
     public void PullHookBack(float distance)
     {
         Vector3 pullDir = (transform.position - currentHook.transform.position).normalized;
-        //float forceCoeff = Mathf.Min(3.0f, Mathf.Max(hookRigidbody.linearVelocity.magnitude, 1.0f));
-        //if(distance < 1.0f)
-        //{
-        //    forceCoeff *= distance;
-        //}
-        //hookRigidbody.AddForce(forceCoeff * pullForce * pullDir, ForceMode.Impulse);
         Vector3 force = distance * pullForce * pullDir;
         Vector3 damp = hookRigidbody.linearVelocity * 0.1f;
         hookRigidbody.AddForce (force - damp, ForceMode.Impulse);
@@ -133,13 +125,17 @@ public class HookThrower : MonoBehaviour
         return currentHook;
     }
 
-    public void PullHookLeft()
+
+    public XRNode xrNode = XRNode.RightHand;
+    [Range(0, 1)] public float amplitude = 0.5f;
+    public float duration = 0.1f;
+
+    public void SendHaptic()
     {
-
-    }
-
-    public void PullHookRight()
-    {
-
+        UnityEngine.XR.InputDevice device = InputDevices.GetDeviceAtXRNode(xrNode);
+        if (device.isValid && device.TryGetHapticCapabilities(out var capabilities) && capabilities.supportsImpulse)
+        {
+            device.SendHapticImpulse(0, amplitude, duration);
+        }
     }
 }

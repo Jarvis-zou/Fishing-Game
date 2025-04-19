@@ -7,7 +7,6 @@ public class EffectDestroy : MonoBehaviour
     void Start()
     {
         ps = GetComponent<ParticleSystem>();
-        Debug.Log(ps);
     }
 
     void Update()

@@ -12,8 +12,11 @@ public class WaterTrigger : MonoBehaviour
         {
             if (splashEffectPrefab != null)
             {
-                Vector3 splashPos = other.ClosestPoint(transform.position);
-                Instantiate(splashEffectPrefab, splashPos, Quaternion.identity);
+                Rigidbody rb = other.GetComponent<Rigidbody>();
+                if (rb == null || rb.linearVelocity.magnitude >= 3.0f) { 
+                    Vector3 splashPos = other.ClosestPoint(transform.position);
+                    Instantiate(splashEffectPrefab, splashPos, Quaternion.identity);
+                }
             }
             objectsInWater.Add(other.attachedRigidbody);
         }
@@ -39,11 +42,9 @@ public class WaterTrigger : MonoBehaviour
     {
         Bounds waterBounds = GetComponent<Collider>().bounds;
 
-        // Get center of object
         if (rb == null) return;
         Vector3 objPos = rb.worldCenterOfMass;
 
-        // Check if inside the water cube
         if (waterBounds.Contains(objPos))
         {
             float objectHeight = rb.transform.lossyScale.y;

@@ -8,9 +8,7 @@ public interface IFishable
     bool CheckInput(int direction, bool shrink);
     float GetStamina();
     int[] GetFishState();
-
     int GetFishType();
-
     GameObject GetCaughtFishPrefab();
 }
 

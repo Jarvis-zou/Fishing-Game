@@ -3,15 +3,15 @@ using UnityEngine;
 public class FishSwim_Sardine : MonoBehaviour
 {
     [Header("Movement Settings")]
-    public Transform poolCenter;      // Reference to the pool's center transform
-    public float speed = 10f;         // Swimming speed (degrees per second)
-    public float swimRadius = 7.5f;   // Swimming radius
+    public Transform poolCenter;
+    public float speed = 10f;    
+    public float swimRadius = 7.5f;   
     
     [Header("Depth Settings")]
-    public float depthOffset = -0.3f; // How much below pool center (negative = underwater)
-    public bool randomizeDepth = true;// Enable random depth variation
-    public float minDepth = -0.5f;    // Minimum depth offset
-    public float maxDepth = -0.1f;    // Maximum depth offset
+    public float depthOffset = -0.3f; 
+    public bool randomizeDepth = true;
+    public float minDepth = -0.5f;  
+    public float maxDepth = -0.1f;    
 
     private float angle;
     private float currentDepth;
@@ -19,13 +19,10 @@ public class FishSwim_Sardine : MonoBehaviour
 
     void Start()
     {
-        // Initialize with current pool position
         currentPoolPosition = poolCenter ? poolCenter.position : Vector3.zero;
-        
-        // Random starting angle
+
         angle = Random.Range(0f, 360f);
-        
-        // Set random depth if enabled
+
         currentDepth = randomizeDepth ? 
             Random.Range(minDepth, maxDepth) : depthOffset;
         
@@ -35,10 +32,8 @@ public class FishSwim_Sardine : MonoBehaviour
 
     void Update()
     {
-        // Update pool position if reference exists
         if (poolCenter) currentPoolPosition = poolCenter.position;
         
-        // Update movement
         angle -= speed * Time.deltaTime;
         angle = Mathf.Repeat(angle, 360f);
         
@@ -48,11 +43,9 @@ public class FishSwim_Sardine : MonoBehaviour
 
     void UpdatePosition()
     {
-        // Calculate circular position (relative to pool)
         float x = Mathf.Cos(angle * Mathf.Deg2Rad) * swimRadius;
         float z = Mathf.Sin(angle * Mathf.Deg2Rad) * swimRadius;
         
-        // Apply position with depth offset
         transform.position = new Vector3(
             currentPoolPosition.x + x,
             currentPoolPosition.y + currentDepth,
@@ -62,26 +55,24 @@ public class FishSwim_Sardine : MonoBehaviour
 
     void UpdateRotation()
     {
-        // Calculate tangent direction (clockwise movement)
         Vector3 tangentDirection = new Vector3(
             Mathf.Sin(angle * Mathf.Deg2Rad),
             0,
             -Mathf.Cos(angle * Mathf.Deg2Rad)
         ).normalized;
 
-        // Apply rotation with slight downward tilt for realism
+        // rotation with slight downward tilt for realism
         if (tangentDirection != Vector3.zero)
         {
             Quaternion rotation = Quaternion.LookRotation(tangentDirection);
             
-            // Optional: Add slight downward tilt (5 degrees)
+            // slight downward tilt (5 degrees)
             rotation *= Quaternion.Euler(5, 0, 0);
             
             transform.rotation = rotation;
         }
     }
 
-    // Editor visualization
     void OnDrawGizmosSelected()
     {
         if (!poolCenter) return;

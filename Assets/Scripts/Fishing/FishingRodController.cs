@@ -25,7 +25,6 @@ public class FishingRodController : MonoBehaviour
     public float lineMultiplier = 5.0f;
     private float currentLineLength;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         actionState = ActionState.Idle;
@@ -34,10 +33,8 @@ public class FishingRodController : MonoBehaviour
         currentLineLength = minLineLength;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // need to compare fishing state
         if (!isFishing)
         {
             if (lineState != LineState.Idle)
@@ -54,7 +51,6 @@ public class FishingRodController : MonoBehaviour
             {
                 currentLineLength -= Time.deltaTime * lineMultiplier * reelSpin.GetSpinSpeed();
 
-                //!isFishing &&
                 if (hookThrower.GetHookState())
                 {
                     currentLineLength = Mathf.Max(currentLineLength, hookRetrieveThreshold);
@@ -127,27 +123,21 @@ public class FishingRodController : MonoBehaviour
     void CalculateDirection() {
         Vector3 originToFish = fishTransform.position - xrOriginTransform.position;
         Vector3 rodToOrigin = transform.position - xrOriginTransform.position;
-
-        // Plane normal: perpendicular to originToFish and world up
         Vector3 planeNormal = Vector3.Cross(originToFish.normalized, Vector3.up);
 
-        // Dot product: sign tells you which side of the plane the rod is on
         float side = Vector3.Dot(rodToOrigin, planeNormal);
 
         if (side > 0.1f)
         {
             actionState = ActionState.Left;
-            //Debug.Log("Rod is on the RIGHT side (intending to drag right)");
         }
         else if (side < -0.1f)
         {
             actionState = ActionState.Right;
-            //Debug.Log("Rod is on the LEFT side (intending to drag left)");
         }
         else
         {
             actionState = ActionState.Idle;
-            //Debug.Log("Rod is centered");
         }
     }
 

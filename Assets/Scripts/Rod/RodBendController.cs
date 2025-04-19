@@ -3,7 +3,7 @@ using UnityEngine;
 public class RodBendController : MonoBehaviour
 {
     public Animator animator;
-    public string animationStateName = "Take 001"; // Change to your actual animation name
+    public string animationStateName = "Take 001";
     private bool isHooked = false;
     private bool isFighting = false;
 
@@ -11,14 +11,12 @@ public class RodBendController : MonoBehaviour
     private float animationLength = 1f;
 
     [SerializeField]
-    private float transitionSpeed = 2f; // Multiplier to speed up/slow down transition
+    private float transitionSpeed = 2f;
 
     void Start()
     {
         if (animator == null)
             animator = GetComponent<Animator>();
-
-        // Get the length of the specified animation clip
         var clips = animator.runtimeAnimatorController.animationClips;
         foreach (var clip in clips)
         {
@@ -32,7 +30,6 @@ public class RodBendController : MonoBehaviour
 
     void Update()
     {
-        // Decide target animation progress based on state
         float targetProgress = 0f;
 
         if (isHooked)
@@ -44,13 +41,11 @@ public class RodBendController : MonoBehaviour
             targetProgress = 0f;
         }
 
-        // Smoothly move animationProgress toward target
         float delta = (Time.deltaTime / animationLength) * transitionSpeed;
         animationProgress = Mathf.MoveTowards(animationProgress, targetProgress, delta);
 
-        // Apply progress to animator
         animator.Play(animationStateName, 0, animationProgress);
-        animator.speed = 0; // Pause automatic playback
+        animator.speed = 0;
     }
 
     public void SetHooked(bool hooked)

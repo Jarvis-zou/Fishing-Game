@@ -6,8 +6,8 @@ public class FishPoseController : MonoBehaviour
     private FishController fishController;
     private Transform refTransform;
     private Vector3 refVector;
-    private float rotationSpeed = 3.0f;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private float rotationSpeed = 100.0f;
+
     void Start()
     {
         fishController = GetComponent<FishController>();
@@ -15,7 +15,6 @@ public class FishPoseController : MonoBehaviour
         refTransform = fishingRodController.GetXROriginTransform();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(refTransform == null) return;
@@ -23,7 +22,6 @@ public class FishPoseController : MonoBehaviour
 
         int[] fishState = fishController.GetFishState();
         Vector3 targetDirection = GetTargetDirection(fishState[0], fishState[1]);
-        //Debug.Log(targetDirection);
         RotateToward(targetDirection);
     }
 
@@ -64,6 +62,15 @@ public class FishPoseController : MonoBehaviour
 
     void RotateToward(Vector3 targetDirection)
     {
-        transform.rotation = Quaternion.LookRotation(targetDirection, Vector3.up);
+        if (targetDirection == Vector3.zero) return;
+
+        Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
+        float angle = 2 * Mathf.Acos(Mathf.Min(Mathf.Abs(Quaternion.Dot(targetRotation, transform.rotation)), 1.0f)) * Mathf.Rad2Deg;
+        Debug.Log(angle);
+        transform.rotation = Quaternion.RotateTowards(
+            transform.rotation,
+            targetRotation,
+            rotationSpeed * Time.deltaTime
+        );
     }
 }
