@@ -6,7 +6,7 @@ This is the final project for the Mixed Reality course (**CS5097**), developed u
 
 | In-Game View |
 |--------------|
-| ![screenshot1](images/image1.png) |
-| ![screenshot2](images/image2.png) |
-| ![screenshot3](images/image3.png) |
-| ![screenshot4](images/image4.png) |
+| ![screenshot1](Images/image1.png) |
+| ![screenshot2](Images/image2.png) |
+| ![screenshot3](Images/image3.png) |
+| ![screenshot4](Images/image4.png) |
